@@ -8,8 +8,8 @@ import { ProductService } from './product.service';
     styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-    pageTitle: string = 'Product List';
-    listFilter: string;
+    private _listFilter: string;
+    pageTitle: string = 'Product List'; 
     showImage: boolean;
 
     imageWidth: number = 50;
@@ -25,7 +25,7 @@ export class ProductListComponent implements OnInit {
         this.productService.getProducts().subscribe(
             (products: IProduct[]) => {
                 this.products = products;
-                this.performFilter(this.listFilter);
+                this.performFilter(this._listFilter);
             },
             (error: any) => this.errorMessage = <any>error
         );
@@ -34,6 +34,20 @@ export class ProductListComponent implements OnInit {
     toggleImage(): void {
         this.showImage = !this.showImage;
     }
+
+    get listFilter(): string {
+        return this._listFilter;
+    }
+
+    set listFilter(filteredBy: string) {
+        this._listFilter = filteredBy;
+        this.performFilter(this._listFilter);
+    }
+
+    // onFilterChange(filterValue: string): void {
+    //     this.listFilter = filterValue;
+    //     this.performFilter(filterValue);
+    // }
 
     performFilter(filterBy?: string): void {
         if (filterBy) {
